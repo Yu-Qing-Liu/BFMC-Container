@@ -1,0 +1,30 @@
+FROM ros-ubuntu:latest
+
+## Set your env vars
+ENV TENSOR_INCLUDE=/TensorRT-8.6.1.6/include
+ENV TENSOR_LIB=/TensorRT-8.6.1.6/lib
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+COPY . .
+
+#################
+# Build Simulator
+#################
+WORKDIR /Simulator
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
+     catkin_make --pkg utils && \
+     catkin_make && \
+     cp /Simulator/setup.bash /Simulator/devel/"
+
+################
+# Build AD
+################
+WORKDIR /AD
+RUN mkdir -p src/perception/include/ncnn && \
+    mkdir -p src/planning/include && \
+    cp -r /ncnn/build/install/* src/perception/include/ncnn && \
+    cp -r /vcpkg/ .
+
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
+    catkin_make -DOpenCV_DIR=/usr/local/lib"

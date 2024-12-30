@@ -1,0 +1,6 @@
+services:
+  ubuntu:
+    build: 
+      context: .
+      dockerfile: Dockerfile.dependencies
+    container_name: ros-container
