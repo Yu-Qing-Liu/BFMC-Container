@@ -1,29 +1,19 @@
 ARG CUDA_VERSION=11.8.0
 
-FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04
-LABEL maintainer="NVIDIA CORPORATION"
-
-ENV DEBIAN_FRONTEND=noninteractive
-
-ENV NV_CUDNN_VERSION=8.9.6.50
-ENV NV_CUDNN_PACKAGE_NAME="libcudnn8"
-
-ENV CUDA_VERSION_MAJOR_MINOR=11.8
-
-ENV NV_CUDNN_PACKAGE="libcudnn8=$NV_CUDNN_VERSION-1+cuda${CUDA_VERSION_MAJOR_MINOR}"
-ENV NV_CUDNN_PACKAGE_DEV="libcudnn8-dev=$NV_CUDNN_VERSION-1+cuda${CUDA_VERSION_MAJOR_MINOR}"
-
-ENV TRT_VERSION=8.6.1.6
-SHELL ["/bin/bash", "-c"]
-
-######################
-# .zip(s)
-######################
-COPY . .
-
 ######################
 # apt-get Dependencies
 ######################
+FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 AS builder1
+COPY . .
+ENV DEBIAN_FRONTEND=noninteractive
+ENV NV_CUDNN_VERSION=8.9.6.50
+ENV NV_CUDNN_PACKAGE_NAME="libcudnn8"
+ENV CUDA_VERSION_MAJOR_MINOR=11.8
+ENV NV_CUDNN_PACKAGE="libcudnn8=$NV_CUDNN_VERSION-1+cuda${CUDA_VERSION_MAJOR_MINOR}"
+ENV NV_CUDNN_PACKAGE_DEV="libcudnn8-dev=$NV_CUDNN_VERSION-1+cuda${CUDA_VERSION_MAJOR_MINOR}"
+
+SHELL ["/bin/bash", "-c"]
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libcurl4-openssl-dev \
     autoconf \
@@ -86,9 +76,12 @@ RUN cd /usr/local/bin && \
     ln -s /usr/bin/python3 python && \
     ln -s /usr/bin/pip3 pip;
 
-###########
+#################
 # TENSOR_RT
-###########
+#################
+FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 AS builder2
+COPY --from=builder1 / /
+ENV TRT_VERSION=8.6.1.6
 RUN tar -xzvf TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-11.8.tar.gz \
     && cp -a TensorRT-8.6.1.6/lib/*.so* /usr/lib/x86_64-linux-gnu \
     && pip install TensorRT-8.6.1.6/python/tensorrt-*-cp38-none-linux_x86_64.whl
@@ -99,9 +92,11 @@ ENV TRT_OSSPATH=~/TensorRT
 ENV PATH="~/TensorRT/build/out:${PATH}"
 ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${TRT_OSSPATH}/build/out:${TRT_LIBPATH}"
 
-############
+#################
 # ROS Noetic
-############
+#################
+FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 as builder3
+COPY --from=builder2 / /
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list' && \
     curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - && \
     apt update && \
@@ -116,15 +111,13 @@ RUN rosdep init && \
     rosdep update
 
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
-
-#################
-# Python packages
-#################
 RUN pip install -r requirements.txt
 
-#########
+#################
 # OPEN_CV
-#########
+#################
+FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 AS builder4
+COPY --from=builder3 / /
 ARG OPENCV_VERSION=4.10.0
 # Look for your gpu model at https://developer.nvidia.com/cuda-gpus
 # For reference Yu's gpu is the NVIDIA GeForce GTX 1650 Ti Mobile with a compute capability of 7.5. Set the cmake flag CUDA_ARCH_BIN to this value (your value for your gpu).
@@ -160,15 +153,19 @@ RUN cd /opt/ &&\
 ###################
 # VCPKG & Realsense
 ###################
+FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 AS builder5
+COPY --from=builder4 / /
 RUN git clone https://github.com/Microsoft/vcpkg.git && \
     cd vcpkg && \
     ./bootstrap-vcpkg.sh && \
     ./vcpkg integrate install && \
     ./vcpkg install realsense2
 
-##########
+##################
 # ncnn
-##########
+##################
+FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 AS builder6
+COPY --from=builder5 / /
 RUN git clone https://github.com/Tencent/ncnn.git && \
     cd ncnn && \
     git submodule update --init && \
@@ -178,11 +175,11 @@ RUN git clone https://github.com/Tencent/ncnn.git && \
     make -j "$(nproc)" && \
     make install
 
-############
+##################
 # Acados
-############
-ENV TOP=/acados
-ENV EXT_PATH=/acados/external/
+##################
+FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 AS builder7
+COPY --from=builder6 / /
 RUN unzip acados.zip && \
     rm -rf /acados/build && \
     cd acados && \
@@ -196,16 +193,15 @@ RUN unzip acados.zip && \
     cd ../ && \
     make shared_library && \
     pip3 install -e /acados/interfaces/acados_template && \
-    echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"~/acados/lib"' >> ~/.bashrc && \
-    echo 'export ACADOS_SOURCE_DIR="~/acados"' >> ~/.bashrc
+    echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/acados/lib"' >> ~/.bashrc && \
+    echo 'export ACADOS_SOURCE_DIR="/acados"' >> ~/.bashrc
 
 ###################################
 # Move Dependencies to home dir
 ###################################
 RUN cp -r /vcpkg/ ~/ && \
     cp -r /TensorRT-8.6.1.6/ ~/ && \
-    cp -r /ncnn/ ~/ && \
-    cp -r /acados/ ~/
+    cp -r /ncnn/ ~/
 
 ##########
 # CLEAN UP
@@ -215,5 +211,4 @@ RUN rm -rf /*.gz
 RUN rm -rf /*.zip
 RUN rm -rf /vcpkg
 RUN rm -rf /ncnn
-RUN rm -rf /acados
 RUN rm -rf /TensorRT-8.6.1.6
