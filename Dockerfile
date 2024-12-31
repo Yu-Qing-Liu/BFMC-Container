@@ -197,6 +197,15 @@ RUN git clone https://github.com/Tencent/ncnn.git && \
     make -j"$(nproc)" && \
     make install
 
+###################################
+# Inject dependencies into project
+###################################
+WORKDIR /AD
+RUN mkdir -p src/perception/include/ncnn && \
+    mkdir -p src/planning/include && \
+    cp -r /ncnn/build/install/* src/perception/include/ncnn && \
+    cp -r /vcpkg/ .
+
 #################
 # Python packages
 #################
