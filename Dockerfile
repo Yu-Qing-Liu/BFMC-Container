@@ -210,7 +210,7 @@ RUN mkdir -p src/perception/include/ncnn && \
     mkdir -p src/planning/include && \
     cp -r /ncnn/build/install/* src/perception/include/ncnn && \
     cp -r /vcpkg/ . && \
-    cp -r /TensorRT-8.6.1.6/ ~/ && \
+    cp -r /TensorRT-8.6.1.6/ ~/
 
 ##########
 # CLEAN UP
