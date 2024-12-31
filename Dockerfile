@@ -193,7 +193,8 @@ RUN unzip acados.zip && \
     sed -i 's/^ACADOS_WITH_QPOASES = .*/ACADOS_WITH_QPOASES = 1/' /acados/Makefile.rule && \
     make -j "$(nproc)" && \
     make install && \
-    make /acados/shared_library && \
+    cd ../ && \
+    make shared_library && \
     pip3 install -e /acados/interfaces/acados_template && \
     echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"~/acados/lib"' >> ~/.bashrc && \
     echo 'export ACADOS_SOURCE_DIR="~/acados"' >> ~/.bashrc
