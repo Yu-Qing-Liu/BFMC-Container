@@ -86,6 +86,11 @@ RUN cd /usr/local/bin && \
     ln -s /usr/bin/python3 python && \
     ln -s /usr/bin/pip3 pip;
 
+#################
+# Python packages
+#################
+RUN pip install -r requirements.txt
+
 ###########
 # TENSOR_RT
 ###########
@@ -185,10 +190,6 @@ RUN unzip acados.zip && \
     echo 'export ACADOS_SOURCE_DIR="/acados"' >> ~/.bashrc && \
     cd /
 
-#################
-# Python packages
-#################
-RUN pip install -r requirements.txt
 
 ##########
 # ncnn
