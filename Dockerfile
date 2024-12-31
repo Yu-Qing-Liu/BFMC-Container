@@ -211,11 +211,11 @@ RUN mkdir -p src/perception/include/ncnn && \
     cp -r /ncnn/build/install/* src/perception/include/ncnn && \
     cp -r /vcpkg/ . && \
     cp -r /TensorRT-8.6.1.6/ ~/ && \
-    cd /
 
 ##########
 # CLEAN UP
 ##########
+WORKDIR /
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /*.gz
 RUN rm -rf /*.zip
