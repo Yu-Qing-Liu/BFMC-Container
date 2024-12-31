@@ -84,7 +84,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Create symbolic links for python and pip
 RUN cd /usr/local/bin && \
     ln -s /usr/bin/python3 python && \
-    ln -s /usr/bin/pip3 pip;
+    ln -s /usr/bin/pip3 pip; && \
+    cd /
 
 ###########
 # TENSOR_RT
@@ -93,8 +94,7 @@ RUN tar -xzvf TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-11.8.tar.gz \
     && cp -a TensorRT-8.6.1.6/lib/*.so* /usr/lib/x86_64-linux-gnu \
     && pip install TensorRT-8.6.1.6/python/tensorrt-*-cp38-none-linux_x86_64.whl
 
-# Download NGC client
-RUN cd /usr/local/bin && wget https://ngc.nvidia.com/downloads/ngccli_cat_linux.zip && unzip ngccli_cat_linux.zip && chmod u+x ngc-cli/ngc && rm ngccli_cat_linux.zip ngc-cli.md5 && echo "no-apikey\nascii\n" | ngc-cli/ngc config set
+RUN cd /usr/local/bin && wget https://ngc.nvidia.com/downloads/ngccli_cat_linux.zip && unzip ngccli_cat_linux.zip && chmod u+x ngc-cli/ngc && rm ngccli_cat_linux.zip ngc-cli.md5 && echo "no-apikey\nascii\n" | ngc-cli/ngc config set && cd /
 
 # Set environment and working directory
 ENV TRT_LIBPATH=/usr/lib/x86_64-linux-gnu
@@ -158,7 +158,8 @@ RUN cd /opt/ &&\
     make install && \
     ldconfig &&\
     # Remove OpenCV sources and build folder
-    rm -rf /opt/opencv-${OPENCV_VERSION} && rm -rf /opt/opencv_contrib-${OPENCV_VERSION}
+    rm -rf /opt/opencv-${OPENCV_VERSION} && rm -rf /opt/opencv_contrib-${OPENCV_VERSION} && \
+    cd /
 
 ###################
 # VCPKG & Realsense
@@ -180,7 +181,8 @@ RUN git clone https://github.com/Tencent/ncnn.git && \
     cd build && \
     cmake -DCMAKE_BUILD_TYPE=Release -DNCNN_VULKAN=ON -DNCNN_SYSTEM_GLSLANG=ON -DNCNN_BUILD_EXAMPLES=ON .. && \
     make -j "$(nproc)" && \
-    make install
+    make install && \
+    cd /
 
 ############
 # Acados
@@ -199,7 +201,8 @@ RUN unzip acados.zip && \
     make shared_library && \
     pip3 install -e /acados/interfaces/acados_template && \
     echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/acados/lib"' >> ~/.bashrc && \
-    echo 'export ACADOS_SOURCE_DIR="/acados"' >> ~/.bashrc
+    echo 'export ACADOS_SOURCE_DIR="/acados"' >> ~/.bashrc && \
+    cd /
 
 ###################################
 # Move Dependencies to home dir
