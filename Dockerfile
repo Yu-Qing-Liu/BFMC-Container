@@ -77,6 +77,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     nlohmann-json3-dev \
     libncurses5-dev \
     libncursesw5-dev \
+    qt5-qmake \
+    qtbase5-dev \
     ${NV_CUDNN_PACKAGE} \
     ${NV_CUDNN_PACKAGE_DEV} \
     && apt-mark hold ${NV_CUDNN_PACKAGE_NAME}
