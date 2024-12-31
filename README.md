@@ -15,8 +15,8 @@ Docker container with base ros-noetic-desktop installation and dependencies
 
 5. Edit system variables in Dockerfile to match your machine, like CUDA_COMPUTE_CAPABILITY in the opencv section.
 
-6. Run dependencies.sh to build the base image which will have all dependencies installed
+6. Run build.sh to build the base image which will have all dependencies installed
 
-7. Run dev.sh each time you change the code. (It will copy AD/ and Simulator/ into the container and build the code.)
+7. Run dev.sh to use the container. Container has a volume mounted at /AD and /Simulator so that code changes are persistent. If you change code on your machine, the container will immediately have access to the changes.
 
-8. Run dockertty.sh to "ssh" into the dev container to run executables.
+8. Compile and run code in container and enjoy :)
