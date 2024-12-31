@@ -96,7 +96,7 @@ ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${TRT_OSSPATH}/build/out:${TRT_LIBPATH}"
 #################
 # ROS Noetic
 #################
-FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 as builder3
+FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 AS builder3
 COPY --from=builder2 / /
 ENV DEBIAN_FRONTEND=noninteractive
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list' && \
