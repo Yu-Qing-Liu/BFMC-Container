@@ -5,7 +5,7 @@ Docker container with base ros-noetic-desktop installation and dependencies
 ```
 0. git clone AD and Simulator
 
-1. download TensorRT tar file as well as Acados zip file (google drive) and place it in the root directory (same dir as the dockerfiles)
+1. Download TensorRT tar file and place it in the root directory (same dir as the dockerfiles)
 
 2. Install docker and docker compose.
 

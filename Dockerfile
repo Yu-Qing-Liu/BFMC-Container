@@ -186,9 +186,14 @@ RUN git clone https://github.com/Tencent/ncnn.git && \
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 AS builder7
 COPY --from=builder6 / /
 ENV DEBIAN_FRONTEND=noninteractive
-RUN unzip acados.zip && \
-    rm -rf /acados/build && \
+RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/acados/lib"' >> ~/.bashrc && \
+    echo 'export ACADOS_SOURCE_DIR="/acados"' >> ~/.bashrc && \
+    source ~/.bashrc && \
+    git clone https://github.com/acados/acados.git && \
     cd acados && \
+    git fetch --all && \
+    git checkout v0.3.0 && \
+    git submodule update --recursive --init && \
     mkdir -p build && \
     cd build && \
     cmake .. -DACADOS_WITH_QPOASES=ON -DACADOS_EXAMPLES=ON -DHPIPM_TARGET=GENERIC -DBLASFEO_TARGET=GENERIC && \
@@ -198,9 +203,7 @@ RUN unzip acados.zip && \
     make install && \
     cd ../ && \
     make shared_library && \
-    pip3 install -e /acados/interfaces/acados_template && \
-    echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/acados/lib"' >> ~/.bashrc && \
-    echo 'export ACADOS_SOURCE_DIR="/acados"' >> ~/.bashrc
+    pip3 install -e /acados/interfaces/acados_template
 
 ###################################
 # Move Dependencies to home dir
