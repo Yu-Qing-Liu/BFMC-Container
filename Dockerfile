@@ -77,8 +77,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     nlohmann-json3-dev \
     libncurses5-dev \
     libncursesw5-dev \
-    qt5-qmake \
-    qtbase5-dev \
     ${NV_CUDNN_PACKAGE} \
     ${NV_CUDNN_PACKAGE_DEV} \
     && apt-mark hold ${NV_CUDNN_PACKAGE_NAME}
@@ -87,11 +85,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN cd /usr/local/bin && \
     ln -s /usr/bin/python3 python && \
     ln -s /usr/bin/pip3 pip;
-
-#################
-# Python packages
-#################
-RUN pip install -r requirements.txt
 
 ###########
 # TENSOR_RT
@@ -126,6 +119,11 @@ RUN rosdep init && \
     rosdep update
 
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
+
+#################
+# Python packages
+#################
+RUN pip install -r requirements.txt
 
 #########
 # OPEN_CV
