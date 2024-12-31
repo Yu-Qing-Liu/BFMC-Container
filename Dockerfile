@@ -185,6 +185,11 @@ RUN unzip acados.zip && \
     echo 'export ACADOS_SOURCE_DIR="/acados"' >> ~/.bashrc && \
     cd /
 
+#################
+# Python packages
+#################
+RUN pip install -r requirements.txt
+
 ##########
 # ncnn
 ##########
@@ -206,11 +211,6 @@ RUN mkdir -p src/perception/include/ncnn && \
     cp -r /ncnn/build/install/* src/perception/include/ncnn && \
     cp -r /vcpkg/ . && \
     cp -r /TensorRT-8.6.1.6/ ~/
-
-#################
-# Python packages
-#################
-RUN pip install -r requirements.txt
 
 ##########
 # CLEAN UP
