@@ -1,36 +1,5 @@
 services:
   ubuntu:
     build: .
-    ports:
-      - 11313:11313
-    runtime: nvidia
-    devices:
-      - "/dev/dri:/dev/dri"
-    environment:
-      - NVIDIA_DRIVER_CAPABILITIES=all
-      - DISPLAY=${DISPLAY}
-      - WAYLAND_DISPLAY=wayland-1
-      - QT_X11_NO_MITSHM=1
-      - LIBGL_ALWAYS_INDIRECT=1
-      - ROS_HOSTNAME=ros-simulator
-      - ROS_MASTER_URI=http://ros-simulator:11313
-      - XAUTHORITY=/home/admin/.Xauthority
-      - XDG_RUNTIME_DIR=/run/user/1000
-    volumes:
-      - /run/user/1000:/run/user/1000
-      - /tmp/.X11-unix:/tmp/.X11-unix:rw
-      - ./AD:/AD
-      - ./Simulator:/Simulator
-    networks:
-      - mynetwork
     stdin_open: true
     tty: true
-    deploy:
-      resources:
-        reservations:
-          cpus: 16
-          memory: 8G
-
-networks:
-  mynetwork:
-    driver: bridge
