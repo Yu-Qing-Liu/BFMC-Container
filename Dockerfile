@@ -93,12 +93,10 @@ RUN tar -xzvf TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-11.8.tar.gz \
     && cp -a TensorRT-8.6.1.6/lib/*.so* /usr/lib/x86_64-linux-gnu \
     && pip install TensorRT-8.6.1.6/python/tensorrt-*-cp38-none-linux_x86_64.whl
 
-RUN cd /usr/local/bin && wget https://ngc.nvidia.com/downloads/ngccli_cat_linux.zip && unzip ngccli_cat_linux.zip && chmod u+x ngc-cli/ngc && rm ngccli_cat_linux.zip ngc-cli.md5 && echo "no-apikey\nascii\n" | ngc-cli/ngc config set
-
 # Set environment and working directory
 ENV TRT_LIBPATH=/usr/lib/x86_64-linux-gnu
-ENV TRT_OSSPATH=/TensorRT
-ENV PATH="/TensorRT/build/out:${PATH}:/usr/local/bin/ngc-cli"
+ENV TRT_OSSPATH=~/TensorRT
+ENV PATH="~/TensorRT/build/out:${PATH}"
 ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${TRT_OSSPATH}/build/out:${TRT_LIBPATH}"
 
 ############
@@ -183,9 +181,11 @@ RUN git clone https://github.com/Tencent/ncnn.git && \
 ############
 # Acados
 ############
+ENV TOP=/acados
+ENV EXT_PATH=/acados/external/
 RUN unzip acados.zip && \
+    rm -rf /acados/build && \
     cd acados && \
-    rm -rf build && \
     mkdir -p build && \
     cd build && \
     cmake .. -DACADOS_WITH_QPOASES=ON -DACADOS_EXAMPLES=ON -DHPIPM_TARGET=GENERIC -DBLASFEO_TARGET=GENERIC && \
@@ -193,18 +193,18 @@ RUN unzip acados.zip && \
     sed -i 's/^ACADOS_WITH_QPOASES = .*/ACADOS_WITH_QPOASES = 1/' /acados/Makefile.rule && \
     make -j "$(nproc)" && \
     make install && \
-    cd .. && \
-    make shared_library && \
+    make /acados/shared_library && \
     pip3 install -e /acados/interfaces/acados_template && \
-    echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/acados/lib"' >> ~/.bashrc && \
-    echo 'export ACADOS_SOURCE_DIR="/acados"' >> ~/.bashrc
+    echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"~/acados/lib"' >> ~/.bashrc && \
+    echo 'export ACADOS_SOURCE_DIR="~/acados"' >> ~/.bashrc
 
 ###################################
 # Move Dependencies to home dir
 ###################################
 RUN cp -r /vcpkg/ ~/ && \
     cp -r /TensorRT-8.6.1.6/ ~/ && \
-    cp -r /ncnn/ ~/
+    cp -r /ncnn/ ~/ && \
+    cp -r /acados/ ~/
 
 ##########
 # CLEAN UP
@@ -214,4 +214,5 @@ RUN rm -rf /*.gz
 RUN rm -rf /*.zip
 RUN rm -rf /vcpkg
 RUN rm -rf /ncnn
+RUN rm -rf /acados
 RUN rm -rf /TensorRT-8.6.1.6
