@@ -190,7 +190,6 @@ RUN unzip acados.zip && \
     echo 'export ACADOS_SOURCE_DIR="/acados"' >> ~/.bashrc && \
     cd /
 
-
 ##########
 # ncnn
 ##########
@@ -219,3 +218,6 @@ RUN mkdir -p src/perception/include/ncnn && \
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /*.gz
 RUN rm -rf /*.zip
+RUN rm -rf /vcpkg
+RUN rm -rf /ncnn
+RUN rm -rf /TensorRT-8.6.1.6
