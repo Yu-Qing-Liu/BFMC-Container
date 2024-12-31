@@ -81,6 +81,7 @@ RUN cd /usr/local/bin && \
 #################
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 AS builder2
 COPY --from=builder1 / /
+ENV DEBIAN_FRONTEND=noninteractive
 ENV TRT_VERSION=8.6.1.6
 RUN tar -xzvf TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-11.8.tar.gz \
     && cp -a TensorRT-8.6.1.6/lib/*.so* /usr/lib/x86_64-linux-gnu \
@@ -97,6 +98,7 @@ ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${TRT_OSSPATH}/build/out:${TRT_LIBPATH}"
 #################
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 as builder3
 COPY --from=builder2 / /
+ENV DEBIAN_FRONTEND=noninteractive
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list' && \
     curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add - && \
     apt update && \
@@ -118,6 +120,7 @@ RUN pip install -r requirements.txt
 #################
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 AS builder4
 COPY --from=builder3 / /
+ENV DEBIAN_FRONTEND=noninteractive
 ARG OPENCV_VERSION=4.10.0
 # Look for your gpu model at https://developer.nvidia.com/cuda-gpus
 # For reference Yu's gpu is the NVIDIA GeForce GTX 1650 Ti Mobile with a compute capability of 7.5. Set the cmake flag CUDA_ARCH_BIN to this value (your value for your gpu).
@@ -155,6 +158,7 @@ RUN cd /opt/ &&\
 ###################
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 AS builder5
 COPY --from=builder4 / /
+ENV DEBIAN_FRONTEND=noninteractive
 RUN git clone https://github.com/Microsoft/vcpkg.git && \
     cd vcpkg && \
     ./bootstrap-vcpkg.sh && \
@@ -166,6 +170,7 @@ RUN git clone https://github.com/Microsoft/vcpkg.git && \
 ##################
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 AS builder6
 COPY --from=builder5 / /
+ENV DEBIAN_FRONTEND=noninteractive
 RUN git clone https://github.com/Tencent/ncnn.git && \
     cd ncnn && \
     git submodule update --init && \
@@ -180,6 +185,7 @@ RUN git clone https://github.com/Tencent/ncnn.git && \
 ##################
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04 AS builder7
 COPY --from=builder6 / /
+ENV DEBIAN_FRONTEND=noninteractive
 RUN unzip acados.zip && \
     rm -rf /acados/build && \
     cd acados && \
