@@ -170,6 +170,18 @@ RUN git clone https://github.com/Microsoft/vcpkg.git && \
     ./vcpkg install realsense2 && \
     cd /
 
+##########
+# ncnn
+##########
+RUN git clone https://github.com/Tencent/ncnn.git && \
+    cd ncnn && \
+    git submodule update --init && \
+    mkdir -p build && \
+    cd build && \
+    cmake -DCMAKE_BUILD_TYPE=Release -DNCNN_VULKAN=ON -DNCNN_SYSTEM_GLSLANG=ON -DNCNN_BUILD_EXAMPLES=ON .. && \
+    make -j "$(nproc)" && \
+    make install
+
 ############
 # Acados
 ############
@@ -187,35 +199,18 @@ RUN unzip acados.zip && \
     make shared_library && \
     pip3 install -e /acados/interfaces/acados_template && \
     echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/acados/lib"' >> ~/.bashrc && \
-    echo 'export ACADOS_SOURCE_DIR="/acados"' >> ~/.bashrc && \
-    cd /
-
-##########
-# ncnn
-##########
-RUN git clone https://github.com/Tencent/ncnn.git && \
-    cd ncnn && \
-    git submodule update --init && \
-    mkdir -p build && \
-    cd build && \
-    cmake -DCMAKE_BUILD_TYPE=Release -DNCNN_VULKAN=ON -DNCNN_SYSTEM_GLSLANG=ON -DNCNN_BUILD_EXAMPLES=ON .. && \
-    make -j "$(nproc)" && \
-    make install
+    echo 'export ACADOS_SOURCE_DIR="/acados"' >> ~/.bashrc
 
 ###################################
-# Inject dependencies into project
+# Move Dependencies to home dir
 ###################################
-WORKDIR /AD
-RUN mkdir -p src/perception/include/ncnn && \
-    mkdir -p src/planning/include && \
-    cp -r /ncnn/build/install/* src/perception/include/ncnn && \
-    cp -r /vcpkg/ ~/ && \
-    cp -r /TensorRT-8.6.1.6/ ~/
+RUN cp -r /vcpkg/ ~/ && \
+    cp -r /TensorRT-8.6.1.6/ ~/ && \
+    cp -r /ncnn/ ~/
 
 ##########
 # CLEAN UP
 ##########
-WORKDIR /
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /*.gz
 RUN rm -rf /*.zip

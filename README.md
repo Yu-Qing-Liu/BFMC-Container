@@ -19,7 +19,7 @@ Docker container with base ros-noetic-desktop installation and dependencies
 
 7. Run dev.sh to use the container. Container has a volume mounted at /AD and /Simulator so that code changes are persistent. If you change code on your machine, the container will immediately have access to the changes.
 
-8. Run cp ~/vcpkg /AD in the container to move vcpkg into project. 
+8. Run inject.sh in the container to move inject dependencies into project. 
 
 9. Run source ~/.bashrc to export all the environment variables (inside the container)
 
