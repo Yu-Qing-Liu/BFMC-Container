@@ -153,7 +153,7 @@ RUN cd /opt/ &&\
         -DCMAKE_INSTALL_PREFIX=/usr/local \
         .. &&\
     # Make
-    make -j"$(nproc)" && \
+    make -j "$(nproc)" && \
     # Install to /usr/local/lib
     make install && \
     ldconfig &&\
@@ -181,8 +181,8 @@ RUN unzip acados.zip && \
     cmake .. -DACADOS_WITH_QPOASES=ON -DACADOS_EXAMPLES=ON -DHPIPM_TARGET=GENERIC -DBLASFEO_TARGET=GENERIC && \
     sed -i 's/^BLASFEO_TARGET = .*/BLASFEO_TARGET = GENERIC/' /acados/Makefile.rule && \
     sed -i 's/^ACADOS_WITH_QPOASES = .*/ACADOS_WITH_QPOASES = 1/' /acados/Makefile.rule && \
-    make -j"$(nproc)" && \
-    make install -j"$(nproc)" && \
+    make -j "$(nproc)" && \
+    make install && \
     cd .. && \
     make shared_library && \
     pip3 install -e /acados/interfaces/acados_template && \
@@ -199,7 +199,7 @@ RUN git clone https://github.com/Tencent/ncnn.git && \
     mkdir -p build && \
     cd build && \
     cmake -DCMAKE_BUILD_TYPE=Release -DNCNN_VULKAN=ON -DNCNN_SYSTEM_GLSLANG=ON -DNCNN_BUILD_EXAMPLES=ON .. && \
-    make -j"$(nproc)" && \
+    make -j "$(nproc)" && \
     make install
 
 ###################################
