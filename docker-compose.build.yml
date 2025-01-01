@@ -1,0 +1,7 @@
+services:
+  ubuntu:
+    build:
+      context: .
+      dockerfile: Dockerfile.build
+    stdin_open: true
+    tty: true

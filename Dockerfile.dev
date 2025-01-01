@@ -1,0 +1,13 @@
+FROM ros-ubuntu:latest
+#####################
+# Acados
+#####################
+RUN cd acados && \
+    rm -rf build && \
+    mkdir -p build && \
+    cd build && \
+    cmake .. -DACADOS_WITH_QPOASES=ON -DACADOS_EXAMPLES=ON -DHPIPM_TARGET=GENERIC -DBLASFEO_TARGET=GENERIC && \
+    sed -i 's/^BLASFEO_TARGET = .*/BLASFEO_TARGET = GENERIC/' /acados/Makefile.rule && \
+    sed -i 's/^ACADOS_WITH_QPOASES = .*/ACADOS_WITH_QPOASES = 1/' /acados/Makefile.rule && \
+    make -j "$(nproc)" && \
+    make install

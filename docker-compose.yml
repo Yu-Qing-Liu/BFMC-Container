@@ -1,5 +1,0 @@
-services:
-  ubuntu:
-    build: .
-    stdin_open: true
-    tty: true
