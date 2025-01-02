@@ -2,12 +2,11 @@
 
 # Container name (you can change this to any name you prefer)
 CONTAINER_NAME="ros-container"
-
 # Function to run the Docker container with the given parameters
 run_container() {
     echo "Starting a new container with name ${CONTAINER_NAME}."
-
     docker run -it --name ${CONTAINER_NAME} \
+        --net=host \
         --gpus all \
         --env=NVIDIA_DRIVER_CAPABILITIES=all \
         --env=DISPLAY=${DISPLAY} \
@@ -22,7 +21,6 @@ run_container() {
         ros-dev \
         bash
 }
-
 # Check if the container is running
 if [[ $(docker ps -q -f name=${CONTAINER_NAME}) ]]; then
     # If the container is already running, use exec to enter the container
@@ -39,4 +37,3 @@ else
     echo "Container is not running, starting the container."
     run_container
 fi
-
