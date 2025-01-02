@@ -1,6 +1,9 @@
 FROM ros-ubuntu:latest
+
+WORKDIR /root
+
 #####################
-# Acados
+# Remake Acados
 #####################
 RUN cd acados && \
     rm -rf build && \

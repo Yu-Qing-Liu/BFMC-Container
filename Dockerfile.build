@@ -1,10 +1,14 @@
 ARG CUDA_VERSION=11.8.0
 
+WORKDIR /root
+
+COPY TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-11.8.tar.gz .
+COPY requirements.txt .
+
 ######################
 # apt-get Dependencies
 ######################
 FROM nvidia/cuda:${CUDA_VERSION}-devel-ubuntu20.04
-COPY . .
 ENV DEBIAN_FRONTEND=noninteractive
 ENV NV_CUDNN_VERSION=8.9.6.50
 ENV NV_CUDNN_PACKAGE_NAME="libcudnn8"
@@ -79,8 +83,8 @@ RUN cd /usr/local/bin && \
 #####################
 # Acados
 #####################
-RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/acados/lib"' >> ~/.bashrc && \
-    echo 'export ACADOS_SOURCE_DIR="/acados"' >> ~/.bashrc && \
+RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib"' >> ~/.bashrc && \
+    echo 'export ACADOS_SOURCE_DIR="/root/acados"' >> ~/.bashrc && \
     git clone https://github.com/acados/acados.git && \
     cd acados && \
     git fetch --all && \
@@ -191,18 +195,8 @@ RUN git clone https://github.com/Tencent/ncnn.git && \
     make install
 
 ######################
-# Move Dependencies 
-######################
-RUN cp -r /vcpkg/ ~/ && \
-    cp -r /TensorRT-8.6.1.6/ ~/ && \
-    cp -r /ncnn/ ~/
-
-######################
 # CLEAN UP
 ######################
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /*.gz
 RUN rm -rf /*.zip
-RUN rm -rf /vcpkg
-RUN rm -rf /ncnn
-RUN rm -rf /TensorRT-8.6.1.6
