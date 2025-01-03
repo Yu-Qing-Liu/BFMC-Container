@@ -1,4 +1,4 @@
-FROM ad-acados:latest
+FROM ad-ncnn:latest
 
 WORKDIR /root
 
@@ -7,27 +7,22 @@ ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-c"]
 
 #####################
-# Remake Acados (bug)
+# Acados
 #####################
-RUN cd acados && \
-    rm -rf build && \
+RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib"' >> ~/.bashrc && \
+    echo 'export ACADOS_SOURCE_DIR="/root/acados"' >> ~/.bashrc && \
+    git clone https://github.com/acados/acados.git && \
+    cd acados && \
+    git fetch --all && \
+    git checkout v0.3.0 && \
+    git submodule update --recursive --init && \
     mkdir -p build && \
     cd build && \
     cmake .. -DACADOS_WITH_QPOASES=ON -DACADOS_EXAMPLES=ON -DHPIPM_TARGET=GENERIC -DBLASFEO_TARGET=GENERIC && \
     sed -i 's/^BLASFEO_TARGET = .*/BLASFEO_TARGET = GENERIC/' /root/acados/Makefile.rule && \
     sed -i 's/^ACADOS_WITH_QPOASES = .*/ACADOS_WITH_QPOASES = 1/' /root/acados/Makefile.rule && \
     make -j "$(nproc)" && \
-    make install
-
-#####################
-# Extra dependencies
-#####################
-RUN apt-get update && apt-get install -y \
-    nlohmann-json3-dev \
-    libncurses5-dev \
-    libncursesw5-dev
-
-#####################
-# Clean up
-#####################
-RUN rm -rf /var/lib/apt/lists/*
+    make install && \
+    cd ../ && \
+    make shared_library && \
+    pip3 install -e /root/acados/interfaces/acados_template

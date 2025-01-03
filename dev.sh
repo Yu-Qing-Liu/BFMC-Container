@@ -2,10 +2,12 @@
 
 # Container name (you can change this to any name you prefer)
 CONTAINER_NAME="ros-container"
+PLATFORM="linux/amd64"
 # Function to run the Docker container with the given parameters
 run_container() {
     echo "Starting a new container with name ${CONTAINER_NAME}."
     docker run -it --name ${CONTAINER_NAME} \
+        --platform ${PLATFORM} \
         --net=host \
         --gpus all \
         --env=NVIDIA_DRIVER_CAPABILITIES=all \
@@ -18,7 +20,7 @@ run_container() {
         --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw \
         --volume=.:/home/admin/Repositories/ROS \
         --workdir=/home/admin/Repositories/ROS \
-        ros-dev \
+        ad-dev \
         bash
 }
 # Check if the container is running
