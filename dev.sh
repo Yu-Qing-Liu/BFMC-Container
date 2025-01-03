@@ -30,8 +30,8 @@ elif [[ $(docker ps -aq -f name=${CONTAINER_NAME}) ]]; then
     # If the container exists but is stopped, remove it
     docker rm ${CONTAINER_NAME}
     # Now, start a new container with the given name
-    run_container
+    run_container "$@"
 else
     # If the container does not exist, start it as a new one
-    run_container
+    run_container "$@"
 fi
