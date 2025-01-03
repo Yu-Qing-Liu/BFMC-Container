@@ -4,5 +4,6 @@ acados/
 venv/
 *.zip
 *.gz
+*.tar
 
 !/Scripts
