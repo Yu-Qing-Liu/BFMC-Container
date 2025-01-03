@@ -3,9 +3,7 @@
 Docker container with base ros-noetic-desktop installation and dependencies
 ```
 ```
-0. git clone AD and Simulator
-
-1. Download TensorRT tar file and place it in the root directory (same dir as the dockerfiles)
+1. git clone AD and Simulator
 
 2. Install docker and docker compose.
 
@@ -13,7 +11,7 @@ Docker container with base ros-noetic-desktop installation and dependencies
 
 4. Install the necessary nvidia drivers for your machine.
 
-5. Edit system variables in Dockerfile to match your machine, like CUDA_COMPUTE_CAPABILITY in the opencv section.
+5. Edit system variables in Dockerfile.opencv to match your machine, like CUDA_COMPUTE_CAPABILITY in the opencv section.
 
 6. Run build.sh to build the base image which will have all dependencies installed
 
@@ -21,6 +19,5 @@ Docker container with base ros-noetic-desktop installation and dependencies
 
 8. Run inject.sh in the container to move inject dependencies into project. 
 
-9. Run source ~/.bashrc to export all the environment variables (inside the container)
-
-10. Compile and run code in container and enjoy :)
+9. Compile and run code in container and enjoy :)
+```
