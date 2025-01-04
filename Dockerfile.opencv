@@ -1,6 +1,6 @@
 FROM ad-ros:latest
 
-WORKDIR /root
+WORKDIR /home/trtuser
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -39,7 +39,7 @@ RUN cd /opt/ &&\
     # Make
     make -j "$(nproc)" && \
     # Install to /usr/local/lib
-    make install && \
+    sudo make install && \
     ldconfig &&\
     # Remove OpenCV sources and build folder
     rm -rf /opt/opencv-${OPENCV_VERSION} && rm -rf /opt/opencv_contrib-${OPENCV_VERSION}

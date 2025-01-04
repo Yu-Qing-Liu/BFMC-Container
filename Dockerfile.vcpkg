@@ -1,6 +1,6 @@
 FROM ad-opencv:latest
 
-WORKDIR /root
+WORKDIR /home/trtuser
 
 ENV DEBIAN_FRONTEND=noninteractive
 

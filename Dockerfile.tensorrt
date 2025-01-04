@@ -95,7 +95,6 @@ fi
 
 # Install PyPI packages
 RUN pip3 install --upgrade pip
-RUN pip3 install setuptools>=41.0.0
 COPY requirements.txt /tmp/requirements.txt
 RUN pip3 install -r /tmp/requirements.txt
 # Workaround to remove numpy installed with tensorflow
@@ -112,4 +111,3 @@ RUN cd /tmp && \
 ENV TRT_LIBPATH /usr/lib/x86_64-linux-gnu
 ENV TRT_OSSPATH /workspace/TensorRT
 ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:${TRT_OSSPATH}/build/out:${TRT_LIBPATH}"
-USER root

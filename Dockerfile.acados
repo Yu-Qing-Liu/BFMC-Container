@@ -1,6 +1,6 @@
 FROM ad-ncnn:latest
 
-WORKDIR /root
+WORKDIR /home/trtuser
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -9,9 +9,7 @@ SHELL ["/bin/bash", "-c"]
 #####################
 # Acados
 #####################
-RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib"' >> ~/.bashrc && \
-    echo 'export ACADOS_SOURCE_DIR="/root/acados"' >> ~/.bashrc && \
-    git clone https://github.com/acados/acados.git && \
+RUN git clone https://github.com/acados/acados.git && \
     cd acados && \
     git fetch --all && \
     git checkout v0.3.0 && \
@@ -19,11 +17,11 @@ RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib"' >> ~/.bash
     mkdir -p build && \
     cd build && \
     cmake .. -DACADOS_WITH_QPOASES=ON -DACADOS_EXAMPLES=ON -DHPIPM_TARGET=GENERIC -DBLASFEO_TARGET=GENERIC && \
-    sed -i 's/^BLASFEO_TARGET = .*/BLASFEO_TARGET = GENERIC/' /root/acados/Makefile.rule && \
-    sed -i 's/^ACADOS_WITH_QPOASES = .*/ACADOS_WITH_QPOASES = 1/' /root/acados/Makefile.rule && \
+    sed -i 's/^BLASFEO_TARGET = .*/BLASFEO_TARGET = GENERIC/' /home/trtuser/acados/Makefile.rule && \
+    sed -i 's/^ACADOS_WITH_QPOASES = .*/ACADOS_WITH_QPOASES = 1/' /home/trtuser/acados/Makefile.rule && \
     make -j "$(nproc)" && \
     cd ../ && \
     make shared_library && \
-    cd acados && \
-    make install && \
-    pip3 install -e /root/acados/interfaces/acados_template
+    cd build && \
+    sudo make install && \
+    pip3 install -e /home/trtuser/acados/interfaces/acados_template

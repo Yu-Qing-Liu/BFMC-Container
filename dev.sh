@@ -6,14 +6,15 @@ PLATFORM="linux/amd64"
 # Function to run the Docker container with the given parameters
 run_container() {
     docker run -it --name ${CONTAINER_NAME} \
+        --user=1000:1000 \
         --platform ${PLATFORM} \
         --net=host \
         --gpus all \
         --env=NVIDIA_DRIVER_CAPABILITIES=all \
-        --env=DISPLAY=${DISPLAY} \
+        --env=DISPLAY=unix$DISPLAY \
         --env=XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR} \
         --env=WAYLAND_DISPLAY=${WAYLAND_DISPLAY} \
-        --env=QT_X11_NO_MITSHM=${QT_X11_NO_MITSHM} \
+        --env=QT_X11_NO_MITSHM=1 \
         --device=/dev/dri:/dev/dri \
         --volume=/run/user/1000:/run/user/1000 \
         --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw \
