@@ -25,3 +25,6 @@ RUN git clone https://github.com/acados/acados.git && \
     cd build && \
     sudo make install && \
     pip3 install -e /home/trtuser/acados/interfaces/acados_template
+
+RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/home/trtuser/acados/lib"' >> /root/.bashrc
+RUN echo 'export ACADOS_SOURCE_DIR="/home/trtuser/acados"' >> /root/.bashrc

@@ -6,7 +6,7 @@ PLATFORM="linux/amd64"
 # Function to run the Docker container with the given parameters
 run_container() {
     docker run -it --name ${CONTAINER_NAME} \
-        --user=1000:1000 \
+        --user=root \
         --platform ${PLATFORM} \
         --net=host \
         --gpus all \
@@ -18,8 +18,8 @@ run_container() {
         --device=/dev/dri:/dev/dri \
         --volume=/run/user/1000:/run/user/1000 \
         --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw \
-        --volume=.:/home/admin/Repositories/ROS \
-        --workdir=/home/admin/Repositories/ROS \
+        --volume=.:/home/trtuser/Repositories/ROS \
+        --workdir=/home/trtuser/Repositories/ROS \
         ad-dev \
         "${@:-bash}"
 }

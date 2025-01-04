@@ -1,5 +1,5 @@
 #!/bin/bash
 cd ..
-./dev.sh bash -i -c "cd AD && catkin_make --pkg utils && catkin_make"
+./dev.sh bash -i -c "cd Simulator && catkin_make --pkg utils && catkin_make"
 cd Scripts
-cp ./setup.bash ../Simulator/devel/
+sudo cp ./setup.bash ../Simulator/devel/
