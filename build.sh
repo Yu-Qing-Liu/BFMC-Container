@@ -15,7 +15,6 @@ docker rmi -f ad-ros:latest || true
 docker rmi -f ad-opencv:latest || true
 docker rmi -f ad-vcpkg:latest || true
 docker rmi -f ad-ncnn:latest || true
-docker rmi -f ad-acados:latest || true
 
 docker buildx prune -f
 

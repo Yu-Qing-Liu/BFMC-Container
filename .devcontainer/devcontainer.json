@@ -1,0 +1,13 @@
+{
+  "name": "ROS Development Container",
+  "image": "ad-dev",
+  "workspaceMount": "source=/home/admin/Repositories/ROS,target=/workspace,type=bind",
+  "workspaceFolder": "/workspace",
+  "mounts": [
+    "source=/run/user/1000,target=/run/user/1000,type=bind",
+    "source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind",
+    "source=.:/home/admin/Repositories/ROS,type=bind",
+    "source=/home/admin/.local/share/nvim/mason,target=/home/admin/.local/share/nvim/mason,type=bind"
+  ]
+}
+

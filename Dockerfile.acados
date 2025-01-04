@@ -22,7 +22,8 @@ RUN echo 'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/root/acados/lib"' >> ~/.bash
     sed -i 's/^BLASFEO_TARGET = .*/BLASFEO_TARGET = GENERIC/' /root/acados/Makefile.rule && \
     sed -i 's/^ACADOS_WITH_QPOASES = .*/ACADOS_WITH_QPOASES = 1/' /root/acados/Makefile.rule && \
     make -j "$(nproc)" && \
-    make install && \
     cd ../ && \
     make shared_library && \
+    cd acados && \
+    make install && \
     pip3 install -e /root/acados/interfaces/acados_template
