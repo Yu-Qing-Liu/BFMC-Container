@@ -18,6 +18,8 @@ run_container() {
         --device=/dev/dri:/dev/dri \
         --volume=/run/user/1000:/run/user/1000 \
         --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw \
+        --volume=./.local:/root/.local \
+        --volume=/home/admin/.config/nvim:/root/.config/nvim \
         --volume=.:/home/trtuser/Repositories/ROS \
         --workdir=/home/trtuser/Repositories/ROS \
         ad-dev \
