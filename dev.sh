@@ -20,6 +20,7 @@ run_container() {
         --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw \
         --volume=./.local:/root/.local \
         --volume=/home/admin/.config/nvim:/root/.config/nvim \
+        --voluem=./.ros:/root/.ros \
         --volume=.:/home/trtuser/Repositories/ROS \
         --workdir=/home/trtuser/Repositories/ROS \
         ad-dev \
