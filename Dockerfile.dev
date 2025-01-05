@@ -4,7 +4,7 @@ WORKDIR /root
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-ENV QT_DEBUG_PLUGINS=1
+ENV QT_DEBUG_PLUGINS=0
 ENV QT_QPA_PLATFORM=xcb
 
 SHELL ["/bin/bash", "-c"]
