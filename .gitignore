@@ -3,6 +3,7 @@ Simulator/
 acados/
 venv/
 .local/
+.ros/
 *.zip
 *.gz
 *.tar
