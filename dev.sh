@@ -9,7 +9,7 @@ run_container() {
         --user=root \
         --platform ${PLATFORM} \
         --net=host \
-        --gpus all \
+        --device nvidia.com/gpu=all \
         --env=NVIDIA_DRIVER_CAPABILITIES=all \
         --env=DISPLAY=unix$DISPLAY \
         --env=XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR} \
