@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 cd ..
 ./dev.sh bash -i -c "cd Simulator && catkin_make --pkg utils && catkin_make"
 cd Scripts

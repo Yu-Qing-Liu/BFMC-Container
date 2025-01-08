@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Container name (you can change this to any name you prefer)
 CONTAINER_NAME="ros-container"
