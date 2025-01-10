@@ -3,8 +3,8 @@
 
 CATKIN_SHELL=bash
 
-export GAZEBO_MODEL_PATH="/home/trtuser/Repositories/ROS/Simulator/src/models_pkg:$GAZEBO_MODEL_PATH"
-export ROS_PACKAGE_PATH="/home/trtuser/Repositories/ROS/Simulator/src:$ROS_PACKAGE_PATH"
+export GAZEBO_MODEL_PATH="/home/admin/Repositories/ROS/Simulator/src/models_pkg:$GAZEBO_MODEL_PATH"
+export ROS_PACKAGE_PATH="/home/admin/Repositories/ROS/Simulator/src:$ROS_PACKAGE_PATH"
 
 # source setup.sh from same directory as this file
 _CATKIN_SETUP_DIR=$(builtin cd "`dirname "${BASH_SOURCE[0]}"`" > /dev/null && pwd)

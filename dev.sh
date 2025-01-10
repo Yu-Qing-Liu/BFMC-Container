@@ -21,8 +21,8 @@ run_container() {
         --volume=./.local:/root/.local \
         --volume=/home/admin/.config/nvim:/root/.config/nvim \
         --volume=./.ros:/root/.ros \
-        --volume=.:/home/trtuser/Repositories/ROS \
-        --workdir=/home/trtuser/Repositories/ROS \
+        --volume=.:/home/admin/Repositories/ROS \
+        --workdir=/home/admin/Repositories/ROS \
         ad-dev \
         "${@:-bash}"
 }
