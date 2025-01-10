@@ -9,16 +9,17 @@ ENV QT_QPA_PLATFORM=xcb
 
 SHELL ["/bin/bash", "-c"]
 
-################################
+####################
 # Extra dependencies
-################################
+####################
 RUN apt-get update && apt-get install -y \
     nlohmann-json3-dev \
     libncurses5-dev \
     libncursesw5-dev \
     software-properties-common \
     lua5.1 \
-    luarocks
+    luarocks \
+    ranger
 
 RUN pip uninstall -y PyQt5 && \
     apt-get install -y python3-pyqt5 python3-venv
@@ -32,3 +33,11 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/ppa -y && \
     apt-get install -y g++-13 gcc-13
 
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
+
+####################
+# Aliases
+####################
+RUN echo "export EDITOR=nvim" >> /root/.bashrc
+RUN echo "export VISUAL=nvim" >> /root/.bashrc
+RUN echo "alias r='. ranger'" >> /root/.bashrc
+RUN echo "alias n='nvim $1'" >> /root/.bashrc

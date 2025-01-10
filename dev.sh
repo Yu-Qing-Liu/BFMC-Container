@@ -11,7 +11,7 @@ run_container() {
         --net=host \
         --device nvidia.com/gpu=all \
         --env=NVIDIA_DRIVER_CAPABILITIES=all \
-        --env=DISPLAY=unix$DISPLAY \
+        --env=DISPLAY=$DISPLAY \
         --env=XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR} \
         --env=WAYLAND_DISPLAY=${WAYLAND_DISPLAY} \
         --env=QT_X11_NO_MITSHM=1 \
@@ -19,7 +19,8 @@ run_container() {
         --volume=/run/user/1000:/run/user/1000 \
         --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw \
         --volume=./.local:/root/.local \
-        --volume=/home/admin/.config/nvim:/root/.config/nvim \
+        --volume=./.dotfiles/dev/nvim:/root/.config/nvim \
+        --volume=./.dotfiles/dev/ranger:/root/.config/ranger \
         --volume=./.ros:/root/.ros \
         --volume=.:/home/admin/Repositories/ROS \
         --workdir=/home/admin/Repositories/ROS \
