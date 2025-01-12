@@ -21,11 +21,12 @@ run_container() {
         --volume=./.local:/root/.local \
         --volume=./.dotfiles/dev/nvim:/root/.config/nvim \
         --volume=./.dotfiles/dev/ranger:/root/.config/ranger \
+        --volume=./.dotfiles/dev/zsh:/root/.oh-my-zsh/themes \
         --volume=./.ros:/root/.ros \
         --volume=.:/home/admin/Repositories/ROS \
         --workdir=/home/admin/Repositories/ROS \
         ad-dev \
-        "${@:-bash}"
+        "${@:-zsh}"
 }
 # Check if the container is running
 if [[ $(docker ps -q -f name=${CONTAINER_NAME}) ]]; then
