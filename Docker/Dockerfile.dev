@@ -23,7 +23,8 @@ RUN apt-get update && apt-get install -y \
     lua5.1 \
     luarocks \
     ranger \
-    zsh
+    zsh \
+    xclip
 
 RUN pip uninstall -y PyQt5 && \
     apt-get install -y python3-pyqt5 python3-venv
