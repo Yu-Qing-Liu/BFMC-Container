@@ -3,6 +3,7 @@ Simulator/
 ROS/
 acados/
 venv/
+temp/
 .dotfiles/
 .local/
 .ros/
