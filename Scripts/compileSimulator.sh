@@ -1,5 +1,5 @@
 #!/bin/sh
 cd ..
-./dev.sh bash -i -c "cd Simulator && catkin_make --pkg utils && catkin_make"
+./dev.sh zsh -i -c "cd Simulator && catkin_make --pkg utils && catkin_make"
 cd Scripts
-sudo cp ./setup.bash ../Simulator/devel/
+sudo cp ./setup.zsh ../Simulator/devel/

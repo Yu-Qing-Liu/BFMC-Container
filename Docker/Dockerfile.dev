@@ -11,6 +11,8 @@ ENV SYSTEMD_EDITOR=nvim
 ENV EDITOR=nvim
 ENV VISUAL=nvim
 ENV SHELL=zsh
+ENV LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/home/trtuser/acados/lib"
+ENV ACADOS_SOURCE_DIR="/home/trtuser/acados"
 
 ####################
 # Extra dependencies
@@ -39,6 +41,8 @@ RUN add-apt-repository ppa:ubuntu-toolchain-r/ppa -y && \
     apt-get install -y g++-13 gcc-13
 
 RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 --slave /usr/bin/g++ g++ /usr/bin/g++-13 --slave /usr/bin/gcov gcov /usr/bin/gcov-13
+
+RUN echo "trtuser ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
 ####################
 # zsh
