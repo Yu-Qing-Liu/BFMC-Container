@@ -6,7 +6,7 @@ PLATFORM="linux/amd64"
 # Function to run the Docker container with the given parameters
 run_container() {
     docker run -it --name ${CONTAINER_NAME} \
-        --user=root \
+        --user=1000:1000 \
         --platform ${PLATFORM} \
         --net=host \
         --device nvidia.com/gpu=all \
@@ -18,13 +18,13 @@ run_container() {
         --device=/dev/dri:/dev/dri \
         --volume=/run/user/1000:/run/user/1000 \
         --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw \
-        --volume=./.local:/root/.local \
-        --volume=./.dotfiles/dev/nvim:/root/.config/nvim \
-        --volume=./.dotfiles/dev/ranger:/root/.config/ranger \
-        --volume=./.dotfiles/dev/zsh:/root/.oh-my-zsh/themes \
-        --volume=./.ros:/root/.ros \
-        --volume=.:/home/admin/Repositories/ROS \
-        --workdir=/home/admin/Repositories/ROS \
+        --volume=./.local:/home/trtuser/.local \
+        --volume=./.dotfiles/dev/nvim:/home/trtuser/.config/nvim \
+        --volume=./.dotfiles/dev/ranger:/home/trtuser/.config/ranger \
+        --volume=./.dotfiles/dev/zsh:/home/trtuser/.oh-my-zsh/themes \
+        --volume=./.ros:/home/trtuser/.ros \
+        --volume=.:/home/trtuser/Repositories/ROS \
+        --workdir=/home/trtuser/Repositories/ROS \
         ad-dev \
         "${@:-zsh}"
 }

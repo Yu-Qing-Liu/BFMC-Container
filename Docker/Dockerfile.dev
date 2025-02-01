@@ -1,6 +1,6 @@
 FROM ad-acados:latest
 
-WORKDIR /root
+WORKDIR /home/trtuser
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -24,7 +24,8 @@ RUN apt-get update && apt-get install -y \
     luarocks \
     ranger \
     zsh \
-    xclip
+    wl-clipboard \
+    gdb
 
 RUN pip uninstall -y PyQt5 && \
     apt-get install -y python3-pyqt5 python3-venv
@@ -42,15 +43,17 @@ RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-13 100 --slave /
 ####################
 # zsh
 ####################
+USER trtuser
+
 RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
-RUN sed -i.old '1s;^;LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/home/trtuser/acados/lib"\n;' /root/.zshrc
+RUN sed -i.old '1s;^;LD_LIBRARY_PATH=$LD_LIBRARY_PATH:"/home/trtuser/acados/lib"\n;' /home/trtuser/.zshrc
 
-RUN sed -i.old '1s;^;ACADOS_SOURCE_DIR="/home/trtuser/acados"\n;' /root/.zshrc
+RUN sed -i.old '1s;^;ACADOS_SOURCE_DIR="/home/trtuser/acados"\n;' /home/trtuser/.zshrc
 
-RUN sed -i.old '1s;^;source /opt/ros/noetic/setup.sh\n;' /root/.zshrc
+RUN sed -i.old '1s;^;source /opt/ros/noetic/setup.sh\n;' /home/trtuser/.zshrc
 
-RUN sed -i 's/^ZSH_THEME=.*/ZSH_THEME="custom"/' /root/.zshrc
+RUN sed -i 's/^ZSH_THEME=.*/ZSH_THEME="custom"/' /home/trtuser/.zshrc
 
 RUN echo -e '\
 function ranger-cd() {\n\
@@ -69,4 +72,4 @@ alias -- n="nvim \$1"\n\
 alias -- r="ranger-cd"\n\
 alias -- ranger="ranger-cd"\n\
 alias -- vimdiff="nvim -d"\n\
-' >> /root/.zshrc
+' >> /home/trtuser/.zshrc
