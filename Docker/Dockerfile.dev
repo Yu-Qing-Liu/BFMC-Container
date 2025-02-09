@@ -13,6 +13,8 @@ ENV VISUAL=nvim
 ENV SHELL=zsh
 ENV LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/home/trtuser/acados/lib"
 ENV ACADOS_SOURCE_DIR="/home/trtuser/acados"
+ENV ROS_MASTER_URI=http://10.121.219.18:11311
+ENV ROS_HOSTNAME=10.122.245.203
 
 ####################
 # Extra dependencies

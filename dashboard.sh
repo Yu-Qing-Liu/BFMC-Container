@@ -10,7 +10,8 @@ run_container() {
         --platform ${PLATFORM} \
         --net=bridge \
         -p 49153:49153 \
-        -p 49154:49154 \
+        -p 49154:49154/udp \
+        -p 11311:11311 \
         --device nvidia.com/gpu=all \
         --env=NVIDIA_DRIVER_CAPABILITIES=all \
         --env=DISPLAY=$DISPLAY \

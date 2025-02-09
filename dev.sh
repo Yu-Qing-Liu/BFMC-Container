@@ -15,6 +15,8 @@ run_container() {
         --env=XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR} \
         --env=WAYLAND_DISPLAY=${WAYLAND_DISPLAY} \
         --env=QT_X11_NO_MITSHM=1 \
+        --env=ROS_MASTER_URI=http://127.0.0.1:11311 \
+        --env=ROS_HOSTNAME=127.0.0.1 \
         --device=/dev/dri:/dev/dri \
         --volume=/run/user/1000:/run/user/1000 \
         --volume=/tmp/.X11-unix:/tmp/.X11-unix:rw \
