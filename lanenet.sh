@@ -33,7 +33,7 @@ run_container() {
 # Check if the container is running
 if [[ $(docker ps -q -f name=${CONTAINER_NAME}) ]]; then
     # If the container is already running, use exec to enter the container
-    docker exec -it ${CONTAINER_NAME} "${@:-zsh}"
+    docker exec -it ${CONTAINER_NAME} "${@:-bash}"
 elif [[ $(docker ps -aq -f name=${CONTAINER_NAME}) ]]; then
     # If the container exists but is stopped, remove it
     docker rm ${CONTAINER_NAME}

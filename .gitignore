@@ -2,6 +2,7 @@ AD/
 Simulator/
 ROS/
 LaneNet/
+Data/
 acados/
 venv/
 temp/
